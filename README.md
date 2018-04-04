@@ -1,3 +1,6 @@
+Fetched from Udacity's Start Code. This Github Repo is used to accomplish the Mobile-Web-Specialist Nanodegree.
+
+
 # Mobile Web Specialist Certification Course
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
