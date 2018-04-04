@@ -1,4 +1,14 @@
+#INFO
 Fetched from Udacity's Start Code. This Github Repo is used to accomplish the Mobile-Web-Specialist Nanodegree.
+
+To run the project launch Git bash with command `python -m http.server 8000` then open your browser and go to `http://localhost:8000`
+
+
+---
+
+
+
+
 
 
 # Mobile Web Specialist Certification Course
