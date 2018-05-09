@@ -1,6 +1,11 @@
 let restaurant;
 var map;
 
+/* Start Service Worker on page load */
+document.addEventListener('DOMContentLoaded', (event) => {
+  DBHelper.startServiceWorker();
+});
+
 /**
  * Initialize Google map, called from HTML.
  */
