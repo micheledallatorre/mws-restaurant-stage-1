@@ -215,9 +215,11 @@ nav h1 a {
   width: 100%;
 }
 .inside #footer {
+/* Absolute position and width 100% cause the footer problem, just remove them or leave empty this class
   bottom: 0;
   position: absolute;
   width: 100%;
+  */
 }
 #restaurant-name {
   color: #f18200;
