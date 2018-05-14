@@ -60,7 +60,12 @@ nav h1 {
   text-align: center;
   padding: 1.2em;
 }
-nav h1 a {
+nav h2 {
+  margin: auto;
+  text-align: center;
+  padding: 1px;
+}
+nav h1 a, nav h2 a {
   color: #fff;
   font-size: 14pt;
   font-weight: 200;
