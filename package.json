@@ -1,0 +1,26 @@
+{
+  "name": "mwsrestaurantstage2",
+  "version": "1.0.0",
+  "description": "Project for Mobile Web Specialist Udacity (restaurant stage 2)",
+  "main": "sw.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^4.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micheledallatorre/mws-restaurant-stage-1.git"
+  },
+  "keywords": [
+    "udacity"
+  ],
+  "author": "Michele Dalla Torre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/micheledallatorre/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/micheledallatorre/mws-restaurant-stage-1#readme"
+}
