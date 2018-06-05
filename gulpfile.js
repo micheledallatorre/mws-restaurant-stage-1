@@ -6,14 +6,16 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
  //browserSync.stream();
 var eslint = require('gulp-eslint');
-
+var concat = require('gulp-concat');
 
 
 
 gulp.task('styles', function(done) {
 	// look for .scss files in sass folder and subdirs
 	gulp.src('sass/**/*.scss')
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass({
+			outputStyle: 'compressed'
+		}).on('error', sass.logError))
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions']
 		}))
@@ -29,6 +31,19 @@ gulp.task('copy-html', function() {
 		.pipe(gulp.dest('./dist'));
 
 	console.log("Index.html copied into dist folder!");
+});
+
+
+gulp.task('scripts', function() {
+	gulp.src('js/**/*.js')
+		.pipe(concat('all.js'))
+		.pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('scripts-dist', function() {
+	gulp.src('js/**/*.js')
+		.pipe(concat('all.js'))
+		.pipe(gulp.dest('dist/js'));
 });
 
 /* copy images into dist/img folder */
@@ -62,6 +77,8 @@ gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'],
 	gulp.watch('sass/**/*.scss', gulp.series('styles'));
 	gulp.watch('js/**/*.js', gulp.series('lint'));
 	gulp.watch('/index.html', gulp.series('copy-html'));
+	/* list to changes in index.html to aumatically reload the whole page */
+	gulp.watch('./dist/index.html').on('change', browserSync.reload);
 
 	browserSync.init({
 		server: './dist'
