@@ -6,7 +6,10 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
  //browserSync.stream();
 var eslint = require('gulp-eslint');
+var jasmine = require('gulp-jasmine-phantom');
 var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var babel = require('gulp-babel');
 
 
 
@@ -36,6 +39,7 @@ gulp.task('copy-html', function() {
 
 gulp.task('scripts', function() {
 	gulp.src('js/**/*.js')
+		.pipe(babel())
 		.pipe(concat('all.js'))
 		.pipe(gulp.dest('dist/js'));
 });
@@ -43,6 +47,7 @@ gulp.task('scripts', function() {
 gulp.task('scripts-dist', function() {
 	gulp.src('js/**/*.js')
 		.pipe(concat('all.js'))
+		.pipe(uglify())
 		.pipe(gulp.dest('dist/js'));
 });
 
@@ -85,3 +90,13 @@ gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'],
 	});
 
 }));
+
+/* task to generate all required files for production mode */
+gulp.task('dist', gulp.series([
+	'copy-html',
+	'copy-images',
+	'styles',
+	'lint',
+	'scripts-dist'
+	])
+);
