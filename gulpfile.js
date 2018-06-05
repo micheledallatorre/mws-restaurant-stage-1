@@ -17,10 +17,26 @@ gulp.task('styles', function(done) {
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions']
 		}))
-		.pipe(gulp.dest('./css'));
+		.pipe(gulp.dest('./dist/css'));
 
-	console.log("Css generated in /css folder!");
+	console.log("Css generated in dist/css folder!");
 	done();
+});
+
+/* copy index.html into dist folder */
+gulp.task('copy-html', function() {
+	gulp.src('./index.html')
+		.pipe(gulp.dest('./dist'));
+
+	console.log("Index.html copied into dist folder!");
+});
+
+/* copy images into dist/img folder */
+gulp.task('copy-images', function() {
+	gulp.src('img/*')
+		.pipe(gulp.dest('dist/img'));
+
+	console.log("Images copied into dist/img folder!");
 });
 
 
@@ -42,12 +58,13 @@ gulp.task('lint', () => {
 
 });
 
-gulp.task('default', gulp.series(['styles', 'lint'], function() {
+gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'], function() {
 	gulp.watch('sass/**/*.scss', gulp.series('styles'));
 	gulp.watch('js/**/*.js', gulp.series('lint'));
+	gulp.watch('/index.html', gulp.series('copy-html'));
 
 	browserSync.init({
-		server: "./"
+		server: './dist'
 	});
 
 }));
