@@ -1,3 +1,5 @@
+ const myDatabase = 'restaurantsDatabase';
+ const myDatabaseObject = 'restaurantsObject';
 /**
  * Common database helper functions.
  */
@@ -48,11 +50,70 @@ class DBHelper {
     if(!navigator.serviceWorker) {
       return Promise.resolve();
     }
-    return idb.open('restaurantsDatabase', 1, function(upgradeDB) {
-      var store = upgradeDB.createObjectStore('restaurantsDatabase', {
+    return idb.open(myDatabase, 1, function(upgradeDB) {
+      var store = upgradeDB.createObjectStore(myDatabaseObject, {
         keyPath: 'id'
       });
       store.createIndex('by-id', 'id');
+    });
+  }
+
+  /** 
+  * Save data (i.e. restaurants) to the database 
+  */ 
+  static save(data) {
+    return DBHelper.openDatabase().then(function(database){
+      if (!database)
+        return;
+
+      var tx = database.transaction(myDatabaseObject, 'readwrite');
+      var store = tx.objectStore(myDatabaseObject);
+      data.forEach(function(restaurant){
+        store.put(restaurant);
+      });
+      return tx.complete;
+    });
+  }
+
+  /*
+  * Fetch and save data to database
+  */
+  static fetchRestaurantsFromDatabase(){
+    return fetch(DBHelper.DATABASE_URL)
+      .then(function(response){
+        return response.json();
+      }).then(restaurants => {
+        DBHelper.save(restaurants);
+        return restaurants;
+      });
+  }
+
+  /*
+   * Get data from database
+   */
+  static getRestaurantsFromCache() {
+    return DBHelper.openDatabase().then(function(database){
+      if(!database)
+        return;
+      var store = database.transaction(myDatabaseObject).objectStore(myDatabaseObject);
+      return store.getAll();
+    });
+  }
+
+  /**
+   * Fetch all restaurants.
+   */
+  static fetchRestaurants(callback) {
+    return DBHelper.getRestaurantsFromCache().then(restaurants => {
+      if(restaurants.length) {
+        return Promise.resolve(restaurants);
+      } else {
+        return DBHelper.fetchRestaurantsFromDatabase();
+      }
+    }).then(restaurants=> {
+      callback(null, restaurants);
+    }).catch(error => {
+      callback(error, null);
     });
   }
 
