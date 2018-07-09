@@ -1,13 +1,20 @@
 module.exports = {
+    "parserOptions": {
+        "ecmaVersion": 8
+    },
     "env": {
-        "browser": true
+        "browser": true//,
+        //"es6": true
     },
     "extends": "eslint:recommended",
     "rules": {
+        /*
         "indent": [
-            "error",
+            "warn",
             "tab"
         ],
+        */
+
         "linebreak-style": [
             "error",
             "windows"
@@ -17,8 +24,10 @@ module.exports = {
             "single"
         ],
         "semi": [
-            "error",
+            "warn",
             "always"
-        ]
+        ],
+        "no-console": "off",
+        "no-unused-vars": [2, { vars: "local", args: "none" }]
     }
 };

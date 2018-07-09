@@ -1,7 +1,13 @@
 # INFO
 Fetched from Udacity's Start Code. This Github Repo is used to accomplish the Mobile-Web-Specialist Nanodegree.
 
-To run the project launch Git bash with command `python -m http.server 8000` then open your browser and go to `http://localhost:8000`
+To run the project:
+
+1. launch Git bash and navigate to this folder, then
+	1. run command `python -m http.server 8000` then open your browser and go to `http://localhost:8000`
+	2. repeat step 1 but run `gulp` that runs the gulp default task
+2. launch server mws-restaurant-stage-2 by going to its directory and launching `node server` (to check if it's working go to http://localhost:1337/restaurants)
+
 
 
 ---

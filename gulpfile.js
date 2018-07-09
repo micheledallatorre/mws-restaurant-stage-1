@@ -4,9 +4,9 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
- //browserSync.stream();
+//browserSync.stream();
 var eslint = require('gulp-eslint');
-var jasmine = require('gulp-jasmine-phantom');
+//var jasmine = require('gulp-jasmine-phantom');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
@@ -24,43 +24,51 @@ gulp.task('styles', function(done) {
 		}))
 		.pipe(gulp.dest('./dist/css'));
 
-	console.log("Css generated in dist/css folder!");
+	console.log('Css generated in dist/css folder!');
 	done();
 });
 
 /* copy index.html into dist folder */
-gulp.task('copy-html', function() {
+gulp.task('copy-html', function(done) {
 	gulp.src('./index.html')
 		.pipe(gulp.dest('./dist'));
 
-	console.log("Index.html copied into dist folder!");
+	console.log('Index.html copied into dist folder!');
+	done();
 });
 
 
-gulp.task('scripts', function() {
+gulp.task('scripts', function(done) {
 	gulp.src('js/**/*.js')
 		.pipe(babel())
 		.pipe(concat('all.js'))
 		.pipe(gulp.dest('dist/js'));
+
+	console.log('Javascript babel and concatenated into dist/js folder!');
+	done();
 });
 
-gulp.task('scripts-dist', function() {
+gulp.task('scripts-dist', function(done) {
 	gulp.src('js/**/*.js')
-		.pipe(concat('all.js'))
-		.pipe(uglify())
+		//.pipe(concat('all.js'))
+		//.pipe(uglify())
 		.pipe(gulp.dest('dist/js'));
+
+	console.log('Javascript minified and concatenated into dist/js folder!');
+	done();
 });
 
 /* copy images into dist/img folder */
-gulp.task('copy-images', function() {
-	gulp.src('img/*')
+gulp.task('copy-images', function(done) {
+	gulp.src('img/*.*')
 		.pipe(gulp.dest('dist/img'));
 
-	console.log("Images copied into dist/img folder!");
+	console.log('Images copied into dist/img folder!');
+	done();
 });
 
 
-gulp.task('lint', () => {
+gulp.task('lint', function() {
 	// ESLint ignores files with "node_modules" paths.
 	// So, it's best to have gulp ignore the directory as well.
 	// Also, Be sure to return the stream from the task;
@@ -78,7 +86,7 @@ gulp.task('lint', () => {
 
 });
 
-gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'], function() {
+gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'], function(done) {
 	gulp.watch('sass/**/*.scss', gulp.series('styles'));
 	gulp.watch('js/**/*.js', gulp.series('lint'));
 	gulp.watch('/index.html', gulp.series('copy-html'));
@@ -88,6 +96,7 @@ gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'],
 	browserSync.init({
 		server: './dist'
 	});
+	done();
 
 }));
 
@@ -96,7 +105,6 @@ gulp.task('dist', gulp.series([
 	'copy-html',
 	'copy-images',
 	'styles',
-	'lint',
+	//'lint',
 	'scripts-dist'
-	])
-);
+]));

@@ -2,32 +2,20 @@
  * Common database helper functions.
  */
 class DBHelper {
-
-  // server port and URL of the Local Development API Server
-  const serverPort = 1337; // Change this to your server port
-  const serverURL = `http://localhost:${serverPort}/restaurants`;
-
   /**
    * Register and start the Service Worker
    */
   static startServiceWorker() {
     if (!navigator.serviceWorker) return;
-    navigator.serviceWorker.register('sw.js').then(function(){
-      console.log('Service Worker registered!');
-    }).catch(function(){
-      console.log('Registration failed');
+    navigator.serviceWorker.register('sw.js')
+    .then(function(r){
+      console.log('Service Worker registered with scope ' + r.scope);
+    }).catch(function(e){
+      console.log('Registration failed with error ' + e);
     });
 
   }
-
-
-
-  static requestError(e, part) {
-    console.log(e);
-          const restaurantList = document.querySelector('#restaurants-list');
-    restaurantList.insertAdjacentHTML('beforeend', `<p class="network-warning">Oh no! There was an error making a request for the ${part}.</p>`);
-  }
-
+  
   static myDebugger(data) {
     //debugger;
     console.log("in mydebugger" + data);
@@ -35,15 +23,37 @@ class DBHelper {
     //restaurantList.insertAdjacentHTML('beforeend', `<p>x</p>`);
     //callback(null, data);
   }
+  
+  /**
+   * Database URL
+   */
+  static get DATABASE_URL() {
+    // server port and URL of the Local Development API Server
+    const serverPort = 1337; // Change this to your server port
+    const server = `localhost`;
+    return `http://${server}:${serverPort}/restaurants`;
+  }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    fetch(serverURL)
-    .then(response => callback(null, response.json()))
-    // .then(DBHelper.myDebugger)
-    .catch(e => DBHelper.requestError(e, 'restaurant'));    
+    fetch(DBHelper.DATABASE_URL)
+      .then(response => response.json())
+      .then(restaurants => callback(null, restaurants))
+      .catch(e => callback(e, null));
+  }
+
+  static openDatabase() {
+    if(!navigator.serviceWorker) {
+      return Promise.resolve();
+    }
+    return idb.open('restaurantsDatabase', 1, function(upgradeDB) {
+      var store = upgradeDB.createObjectStore('restaurantsDatabase', {
+        keyPath: 'id'
+      });
+      store.createIndex('by-id', 'id');
+    });
   }
 
   /**
@@ -106,8 +116,7 @@ class DBHelper {
       if (error) {
         callback(error, null);
       } else {
-               restaurantPromise.then(function(restaurants){
-        let results = restaurants
+        let results = restaurantPromise;
         if (cuisine != 'all') { // filter by cuisine
           results = results.filter(r => r.cuisine_type == cuisine);
         }
@@ -115,7 +124,6 @@ class DBHelper {
           results = results.filter(r => r.neighborhood == neighborhood);
         }
         callback(null, results);
-                });
       }
     });
   }
@@ -125,18 +133,15 @@ class DBHelper {
    */
   static fetchNeighborhoods(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurantPromise) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
         // Get all neighborhoods from all restaurants
-        restaurantPromise.then(function(restaurants){
           const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
           // Remove duplicates from neighborhoods
           const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
           callback(null, uniqueNeighborhoods);
-        });
-
       }
     });
   }
@@ -146,17 +151,15 @@ class DBHelper {
    */
   static fetchCuisines(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurantPromise) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
         // Get all cuisines from all restaurants
-        restaurantPromise.then(function(restaurants){
           const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
           // Remove duplicates from cuisines
           const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
           callback(null, uniqueCuisines);
-        });
       }
     });
   }
@@ -172,8 +175,15 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    // TODO if underfined, return placeholder image
-    return (`/img/${restaurant.photograph}.jpg`);
+    // TODO use large/small images to optimize 
+
+    // if underfined, return placeholder image
+    if (restaurant.photograph === undefined) {
+      // assign name of the placeholder image (no_image_available.svg)
+      return '/img/no_image_available.svg';
+    }
+    else
+      return (`/img/${restaurant.photograph}.jpg`);
   }
 
   /**
