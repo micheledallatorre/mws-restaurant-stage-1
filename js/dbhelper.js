@@ -1,5 +1,8 @@
- const myDatabase = 'restaurantsDatabase';
- const myDatabaseObject = 'restaurantsObject';
+/*eslint-disable no-undef*/
+/*eslint-disable no-unused-vars*/
+
+const myDatabase = 'restaurantsDatabase';
+const myDatabaseObject = 'restaurantsObject';
 /**
  * Common database helper functions.
  */
@@ -10,17 +13,16 @@ class DBHelper {
   static startServiceWorker() {
     if (!navigator.serviceWorker) return;
     navigator.serviceWorker.register('sw.js')
-    .then(function(r){
-      console.log('Service Worker registered with scope ' + r.scope);
-    }).catch(function(e){
-      console.log('Registration failed with error ' + e);
-    });
-
+      .then(function(r){
+        console.log('Service Worker registered with scope ' + r.scope);
+      }).catch(function(e){
+        console.log('Registration failed with error ' + e);
+      });
   }
   
   static myDebugger(data) {
     //debugger;
-    console.log("in mydebugger" + data);
+    console.log('in mydebugger' + data);
     //const restaurantList = document.querySelector('#restaurants-list');
     //restaurantList.insertAdjacentHTML('beforeend', `<p>x</p>`);
     //callback(null, data);
@@ -32,19 +34,20 @@ class DBHelper {
   static get DATABASE_URL() {
     // server port and URL of the Local Development API Server
     const serverPort = 1337; // Change this to your server port
-    const server = `localhost`;
+    const server = 'localhost';
     return `http://${server}:${serverPort}/restaurants`;
   }
 
   /**
    * Fetch all restaurants.
-   */
+   *
   static fetchRestaurants(callback) {
     fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
       .then(restaurants => callback(null, restaurants))
       .catch(e => callback(e, null));
   }
+  */
 
   static openDatabase() {
     if(!navigator.serviceWorker) {
@@ -198,11 +201,11 @@ class DBHelper {
       if (error) {
         callback(error, null);
       } else {
-        // Get all neighborhoods from all restaurants
-          const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
-          // Remove duplicates from neighborhoods
-          const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
-          callback(null, uniqueNeighborhoods);
+      // Get all neighborhoods from all restaurants
+        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
+        // Remove duplicates from neighborhoods
+        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i);
+        callback(null, uniqueNeighborhoods);
       }
     });
   }
@@ -217,10 +220,10 @@ class DBHelper {
         callback(error, null);
       } else {
         // Get all cuisines from all restaurants
-          const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
-          // Remove duplicates from cuisines
-          const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
-          callback(null, uniqueCuisines);
+        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
+        // Remove duplicates from cuisines
+        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i);
+        callback(null, uniqueCuisines);
       }
     });
   }
@@ -251,15 +254,15 @@ class DBHelper {
    * Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {
-  // https://leafletjs.com/reference-1.3.0.html#marker  
+    // https://leafletjs.com/reference-1.3.0.html#marker  
     const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
       {title: restaurant.name,
-      alt: restaurant.name,
-      url: DBHelper.urlForRestaurant(restaurant)
-      })
-      marker.addTo(newMap);
+        alt: restaurant.name,
+        url: DBHelper.urlForRestaurant(restaurant)
+      });
+    marker.addTo(newMap);
     return marker;
-  } 
+  }
   /* static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({
       position: restaurant.latlng,
@@ -272,3 +275,5 @@ class DBHelper {
   } */
 
 }
+/*eslint-enable no-undef*/
+/*eslint-enable no-unused-vars*/
