@@ -1,10 +1,12 @@
 // define a cache variable for this project
 var mwsRestaurantCache = 'mws-restaurant-stage-1';
 
-/* add install event */
+/* add install event and cache all the application static files */
 self.addEventListener('install', function(event) {
+	console.log(`Installing Service Worker...`);
 	event.waitUntil(
 		caches.open(mwsRestaurantCache).then(function(cache) {
+			console.log(`Service Worker caching application files...`);
 			// cache all resources
 			return cache.addAll([
 				'/index.html',
@@ -31,13 +33,52 @@ self.addEventListener('install', function(event) {
 		}));
 });
 
-// match incoming requests: if there is a cached entry, return it
-self.addEventListener('fetch', function(event) {
-	event.respondWith(
-		caches.match(event.request).then(function(response) {
-			return response || fetch(event.request);
-		})
-	);
+// Service worker activation
+self.addEventListener('activate', function(event) {
+  console.log('Service worker activation...');
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function(cacheName) {
+          return cacheName.startsWith('mws-') && cacheName != mwsRestaurantCache;
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      ).then(() => { 
+      	console.log('Service worker activated');
+      });
+    })
+  );
 });
 
-// TODO check images and cache
+// match incoming requests: if there is a cached entry, return it
+self.addEventListener('fetch', function(event) {
+  event.respondWith(getDataFromCache(event.request).catch((error) => {
+    console.log(error);
+  }));
+  event.waitUntil(update(event.request));
+});
+
+// update cache with the request
+function update(request) {
+  return caches.open(mwsRestaurantCache).then(function(cache) {
+    return fetch(request).then(function (response) {
+      return cache.put(request, response);
+    });
+  });
+}
+
+// get request from cache, if present
+function getDataFromCache(request) {
+  return caches.open(mwsRestaurantCache).then(function(cache) {
+    return cache.match(request).then(function (matching) {
+      return matching || fetch(request);
+    });
+  });
+}
+
+self.addEventListener('message', function(event) {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});

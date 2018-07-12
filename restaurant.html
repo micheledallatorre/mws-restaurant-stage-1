@@ -61,6 +61,11 @@
 
   <!-- Beginning scripts -->
   <!-- Database helpers -->
+  <script type="text/javascript" charset="utf-8">
+       if ('serviceWorker' in navigator) {
+         navigator.serviceWorker.register('sw.js');
+       }
+  </script>
   <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <!-- Main javascript file -->

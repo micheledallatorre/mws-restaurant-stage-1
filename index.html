@@ -36,6 +36,11 @@
     </section>
   </main>
 
+  <script type="text/javascript" charset="utf-8">
+       if ('serviceWorker' in navigator) {
+         navigator.serviceWorker.register('sw.js');
+       }
+  </script>
   <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>

@@ -6,7 +6,7 @@
 class DBHelper {
   /**
    * Register and start the Service Worker
-   */
+   *
   static startServiceWorker() {
     if (!navigator.serviceWorker) return;
     navigator.serviceWorker.register('sw.js')
@@ -17,6 +17,7 @@ class DBHelper {
     });
 
   }
+  */
   
   static myDebugger(data) {
     //debugger;
@@ -89,8 +90,8 @@ class DBHelper {
   }
 
   /*
-   * Get data from database
-   */
+  * Get data from database
+  */
   static getRestaurantsFromCache() {
     return DBHelper.openDatabase().then(function(database){
       if(!database)
@@ -101,7 +102,7 @@ class DBHelper {
   }
 
   /**
-   * Fetch all restaurants.
+   * Fetch all restaurants
    */
   static fetchRestaurants(callback) {
     return DBHelper.getRestaurantsFromCache().then(restaurants => {
