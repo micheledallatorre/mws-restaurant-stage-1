@@ -1,20 +1,21 @@
 # INFO
 Fetched from Udacity's Start Code. This Github Repo is used to accomplish the Mobile-Web-Specialist Nanodegree.
 
-To run the project:
+## How to run the project
+1. Launch server `mws-restaurant-stage-2` by going to its directory and launching `node server`. 
+	* Refer to https://github.com/udacity/mws-restaurant-stage-2 for further instructions.
+	* To check if it's working, go to http://localhost:1337/restaurants
+2. Install Gulp and all the dependencies
+```
+npm install gulp-cli -g
 
-1. launch Git bash and navigate to this folder, then
-	1. run command `python -m http.server 8000` then open your browser and go to `http://localhost:8000`
-	2. repeat step 1 but run `gulp` that runs the gulp default task
-2. launch server mws-restaurant-stage-2 by going to its directory and launching `node server` (to check if it's working go to http://localhost:1337/restaurants)
+npm install
+```
+3. Build project files with gulp by running
+```gulp``` 
+that creates the `dist` folder and opens the browser on [http://localhost:8000](http://localhost:8000).
 
-
-
----
-
-
-
-
+(Alternatively, open your terminal, navigate to this project folder, then run command `python -m http.server 8000`, finally open your browser and go to [http://localhost:8000](http://localhost:8000)).
 
 
 # Mobile Web Specialist Certification Course
