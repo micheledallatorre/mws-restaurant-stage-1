@@ -28,7 +28,12 @@ self.addEventListener('install', function(event) {
         '/img/7.jpg',
         '/img/8.jpg',
         '/img/9.jpg',
-        '/img/10.jpg'
+        '/img/10.jpg',
+        '/img/icons/layers.png',
+        '/img/icons/layers-2x.png',
+        '/img/icons/marker-icon.png',
+        '/img/icons/marker-icon-2x.png',
+        '/img/icons/marker-shadow.png'
       ]);
     }));
 });

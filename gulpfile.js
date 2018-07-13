@@ -16,6 +16,11 @@ var babel = require('gulp-babel');
 
 
 gulp.task('styles', function(done) {
+
+  gulp.src('./sass/leaflet.css')
+    .pipe(gulp.dest('./dist/css'));  
+
+    
   // look for .scss files in sass folder and subdirs
   gulp.src('sass/**/*.scss')
     .pipe(sass({
@@ -32,7 +37,7 @@ gulp.task('styles', function(done) {
 
 /* copy index.html into dist folder */
 gulp.task('copy-html', function(done) {
-  gulp.src('./index.html')
+  gulp.src('./*.html')
     .pipe(gulp.dest('./dist'));
   console.log('Index.html copied into dist folder!');
   done();
@@ -40,6 +45,8 @@ gulp.task('copy-html', function(done) {
 
 
 gulp.task('scripts', function(done) {
+  gulp.src('sw.js')
+    .pipe(gulp.dest('dist/'));  
   gulp.src('js/**/*.js')
     .pipe(babel())
     .pipe(concat('all.js'))
@@ -50,6 +57,8 @@ gulp.task('scripts', function(done) {
 });
 
 gulp.task('scripts-dist', function(done) {
+  gulp.src('sw.js')
+    .pipe(gulp.dest('dist/'));  
   gulp.src('js/**/*.js')
     //.pipe(concat('all.js'))
     //.pipe(uglify())
@@ -63,7 +72,12 @@ gulp.task('scripts-dist', function(done) {
 gulp.task('copy-images', function(done) {
   gulp.src('img/*.*')
     .pipe(gulp.dest('dist/img'));
-  console.log('Images copied into dist/img folder!');
+  console.log('Images copied into dist/img/ folder!');
+
+  // copy icons  
+  gulp.src('img/icons/*.*')
+    .pipe(gulp.dest('dist/img/icons'));  
+  console.log('Images copied into dist/img/icons folder!');
   done();
 });
 
@@ -93,7 +107,8 @@ gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'],
   gulp.watch('./dist/index.html').on('change', browserSync.reload);
 
   browserSync.init({
-    server: './dist'
+    server: './dist',
+    port: 8000
   });
 
   done();
@@ -104,6 +119,6 @@ gulp.task('dist', gulp.series([
   'copy-html',
   'copy-images',
   'styles',
-  //'lint',
+  'lint',
   'scripts-dist'
 ]));
