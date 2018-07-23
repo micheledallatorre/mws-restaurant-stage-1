@@ -33,7 +33,18 @@ self.addEventListener('install', function(event) {
         '/img/icons/layers-2x.png',
         '/img/icons/marker-icon.png',
         '/img/icons/marker-icon-2x.png',
-        '/img/icons/marker-shadow.png'
+        '/img/icons/marker-shadow.png',
+        // favicons
+        '/img/icons/favicon.ico',
+        '/img/icons/favicon16x16.png',
+        '/img/icons/favicon20x20.png',
+        '/img/icons/favicon24x24.png',
+        '/img/icons/favicon32x32.png',
+        '/img/icons/favicon48x48.png',
+        '/img/icons/favicon64x64.png',
+        '/img/icons/favicon128x128.png',
+        '/img/icons/favicon256x256.png',
+        '/img/icons/favicon512x512.png'
       ]);
     }));
 });

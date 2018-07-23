@@ -78,7 +78,12 @@ gulp.task('copy-images', function(done) {
   gulp.src('img/icons/*.*')
     .pipe(gulp.dest('dist/img/icons'));  
   console.log('Images copied into dist/img/icons folder!');
-  done();
+  
+  // copy favicon
+  //gulp.src('img/icons/favicon*.*')
+  //  .pipe(gulp.dest('./dist/img/icons'));
+  console.log('Favicon copied into dist/img/icons folder!');
+  done();  
 });
 
 
@@ -99,10 +104,17 @@ gulp.task('lint', function() {
     .pipe(eslint.failAfterError());
 });
 
-gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images'], function(done) {
+gulp.task('copy-manifest', function(done) {
+  gulp.src('manifest.json')
+    .pipe(gulp.dest('./dist'));
+  done(); 
+});
+
+gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images', 'scripts-dist', 'copy-manifest'], function(done) {
   gulp.watch('sass/**/*.scss', gulp.series('styles'));
   gulp.watch('js/**/*.js', gulp.series('lint'));
   gulp.watch('/index.html', gulp.series('copy-html'));
+  gulp.watch('./manifest.json', gulp.series('copy-manifest'));
   /* list to changes in index.html to aumatically reload the whole page */
   gulp.watch('./dist/index.html').on('change', browserSync.reload);
 
@@ -120,5 +132,6 @@ gulp.task('dist', gulp.series([
   'copy-images',
   'styles',
   'lint',
-  'scripts-dist'
+  'scripts-dist',
+  'copy-manifest'
 ]));

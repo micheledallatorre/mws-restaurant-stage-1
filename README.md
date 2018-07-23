@@ -2,8 +2,8 @@
 Fetched from Udacity's Start Code. This Github Repo is used to accomplish the Mobile-Web-Specialist Nanodegree.
 
 ## How to run the project
-1. Launch server `mws-restaurant-stage-2` by going to its directory and launching `node server`. 
-	* Refer to https://github.com/udacity/mws-restaurant-stage-2 for further instructions.
+1. Launch server `mws-restaurant-stage-3` by going to its directory and launching `node server`. 
+	* Refer to https://github.com/udacity/mws-restaurant-stage-3 for further instructions.
 	* To check if it's working, go to http://localhost:1337/restaurants
 2. Install Gulp and all the dependencies
 ```

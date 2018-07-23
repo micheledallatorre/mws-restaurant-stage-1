@@ -1,24 +1,54 @@
 {
   "name": "Restaurant Reviews",
   "short_name": "Restaurant-Reviews",
-  "icons": [{
-    "src": "/img/icon.png",
-    "sizes": "144x144",
-    "type": "image/png"
-  },
-  {
-    "src": "/img/icon_512.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  },
-  {
-    "src": "/img/icon_256.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  }],
   "display": "standalone",
   "scope": "/",
   "theme_color": "#2196F3",
   "background_color":"#2196F3",
-  "start_url": "index.html"
+  "start_url": "index.html",
+  "icons": [{
+    "src": "/img/icons/favicon512x512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  },
+  {
+    "src": "/img/icons/favicon256x256.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  },
+  {
+    "src": "/img/icons/favicon128x128.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  },
+  {
+    "src": "/img/icons/favicon64x64.png",
+    "sizes": "64x64",
+    "type": "image/png"
+  },
+{
+    "src": "/img/icons/favicon48x48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  },
+{
+    "src": "/img/icons/favicon32x32.png",
+    "sizes": "32x32",
+    "type": "image/png"
+  },
+{
+    "src": "/img/icons/favicon24x24.png",
+    "sizes": "24x24",
+    "type": "image/png"
+  },
+{
+    "src": "/img/icons/favicon20x20.png",
+    "sizes": "20x20",
+    "type": "image/png"
+  },
+{
+    "src": "/img/icons/favicon16x16.png",
+    "sizes": "16x16",
+    "type": "image/png"
+  }]
 }
