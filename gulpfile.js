@@ -7,11 +7,11 @@ var browserSync = require('browser-sync').create();
 //browserSync.stream();
 var eslint = require('gulp-eslint');
 //var jasmine = require('gulp-jasmine-phantom');
-var concat = require('gulp-concat');
 /*eslint-disable no-unused-vars*/
+var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-/*eslint-enable no-unused-vars*/
 var babel = require('gulp-babel');
+/*eslint-enable no-unused-vars*/
 
 
 
@@ -52,7 +52,7 @@ gulp.task('scripts', function(done) {
     .pipe(concat('all.js'))
     .pipe(gulp.dest('dist/js'));
 
-  console.log('Javascript babel and concatenated into dist/js folder!');
+  console.log('Javascript copied into dist/js folder!');
   done();
 });
 
@@ -64,7 +64,7 @@ gulp.task('scripts-dist', function(done) {
     //.pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 
-  console.log('Javascript minified and concatenated into dist/js folder!');
+  console.log('Javascript copied into dist/js folder!');
   done();
 });
 
@@ -112,11 +112,12 @@ gulp.task('copy-manifest', function(done) {
 
 gulp.task('default', gulp.series(['styles', 'lint', 'copy-html', 'copy-images', 'scripts-dist', 'copy-manifest'], function(done) {
   gulp.watch('sass/**/*.scss', gulp.series('styles'));
-  gulp.watch('js/**/*.js', gulp.series('lint'));
-  gulp.watch('/index.html', gulp.series('copy-html'));
+  gulp.watch('js/**/*.js', gulp.series('lint', 'scripts-dist'));
+  gulp.watch('sw.js', gulp.series('lint', 'scripts-dist'));
+  gulp.watch('./index.html', gulp.series('copy-html'));
   gulp.watch('./manifest.json', gulp.series('copy-manifest'));
   /* list to changes in index.html to aumatically reload the whole page */
-  gulp.watch('./dist/index.html').on('change', browserSync.reload);
+  gulp.watch('./index.html').on('change', browserSync.reload);
 
   browserSync.init({
     server: './dist',
