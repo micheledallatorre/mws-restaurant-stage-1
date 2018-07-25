@@ -71,15 +71,31 @@ self.addEventListener('activate', function(event) {
 
 // match incoming requests: if there is a cached entry, return it
 self.addEventListener('fetch', function(event) {
+  console.info('Event: Fetch');
+  event.respondWith(
+    /* ignoreSearch: A Boolean that specifies whether the matching process should ignore the query string in the url.  If set to true, the ?value=bar part of http://foo.com/?value=bar would be ignored when performing a match. It defaults to false. */
+    caches.match(event.request, { ignoreSearch: true }).then(response => {
+      if (response) 
+        return response;
+      return fetch(event.request);
+    }).catch((error) => {
+      console.log(error);}
+    )
+  );
+  /*
   event.respondWith(getDataFromCache(event.request).catch((error) => {
     console.log(error);
   }));
   event.waitUntil(update(event.request));
-});
+  */
+}); 
+
 
 // update cache with the request
+/*
 function update(request) {
   return caches.open(mwsRestaurantCache).then(function(cache) {
+    // todo check using request.clone() to fix errors
     return fetch(request).then(function (response) {
       return cache.put(request, response);
     });
@@ -94,6 +110,7 @@ function getDataFromCache(request) {
     });
   });
 }
+*/
 
 self.addEventListener('message', function(event) {
   if (event.data.action === 'skipWaiting') {

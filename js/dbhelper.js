@@ -78,6 +78,30 @@ class DBHelper {
     });
   }
 
+  /**
+  *  Update favorite value in the database
+  */
+  static updateFavorite(id, flag){
+    return DBHelper.openDatabase().then(function(database){
+      /*if (!database)
+        return;
+*/
+      const tx = database.transaction(myDatabaseObject, 'readwrite');
+      const store = tx.objectStore(myDatabaseObject);
+      var myRestaurant = store.get(id) || 0;
+
+      // var myRestaurant.onsuccess = function() {
+        //var val = myRestaurant.result;
+        // update is_favorite field for restaurant object
+      myRestaurant.is_favorite = String(flag); 
+      store.put(myRestaurant,id);
+      console.log("\nval:", myRestaurant);
+      console.log("\nid:", id);
+      return tx.complete;
+      //};
+    }); 
+  }
+
   /*
   * Fetch and save data to database
   */
@@ -172,9 +196,26 @@ class DBHelper {
   }
 
   /**
+  * Fetch restaurants by favorite value with proper error handling.
+  */
+  static fetchRestaurantByFavorite(favorite, callback) {
+    // Fetch all restaurants
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        // Filter restaurants to have only given favorite value
+        const results = restaurants.filter(r => r.favorites == favorite);
+        callback(null, results);
+      }
+    });
+  }
+
+
+  /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
-  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+  static fetchRestaurantByCuisineAndNeighborhoodAndFavorite(cuisine, neighborhood, favorite, callback) {
     // Fetch all restaurants
     DBHelper.fetchRestaurants((error, restaurantPromise) => {
       if (error) {
@@ -186,6 +227,9 @@ class DBHelper {
         }
         if (neighborhood != 'all') { // filter by neighborhood
           results = results.filter(r => r.neighborhood == neighborhood);
+        }
+        if (favorite === true) { // filter by favorite
+          results = results.filter(r => r.is_favorite == 'true');
         }
         callback(null, results);
       }
@@ -263,6 +307,19 @@ class DBHelper {
     marker.addTo(newMap);
     return marker;
   }
+
+  /**
+  * Update favorite flag
+  */
+  static toggleFavorite(id, flag) {
+    //fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=${flag}`, { method: 'POST' })
+    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${flag}`, { method: 'POST' })
+      .then(DBHelper.updateFavorite(id, flag))
+      .then(response => console.log(`Set favorite to ${flag} for restaurant ${id}`))
+      // reload page to update favorite button
+      .then(location.reload());
+    }
+
   /* static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({
       position: restaurant.latlng,

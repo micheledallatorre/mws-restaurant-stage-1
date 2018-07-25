@@ -107,7 +107,33 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
+
+  // fill favorite HTML element
+  fillRestaurantFavoriteHTML();
 };
+
+
+/**
+ * Create restaurant add or remove favorite
+ */
+fillRestaurantFavoriteHTML = (id = self.restaurant.id, is_favorite = self.restaurant.is_favorite) => {
+  const favoriteElem = document.getElementById('restaurant-favorite');
+  console.log(self.restaurant);
+
+  let favButton = document.createElement('button');
+  favButton.setAttribute('id', 'favorite-button');
+
+  if (is_favorite == 'true') {
+    favButton.innerHTML = 'Remove from favorite';
+    favButton.setAttribute('onclick',`DBHelper.toggleFavorite(${id}, false);`);
+  } else {
+    favButton.innerHTML = 'Add to favorite';
+    favButton.setAttribute('onclick',`DBHelper.toggleFavorite(${id}, true);`);
+  }
+
+  favoriteElem.appendChild(favButton);
+};
+
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.

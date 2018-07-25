@@ -241,6 +241,13 @@ nav h1 a, nav h2 a {
   text-transform: uppercase;
   line-height: 1.1;
 }
+#favorite-button {
+  background-color: #f18200;
+  color: #ffffff;
+  font-size: 10px;
+  padding: 15px;
+  border-radius: 20px;
+}
 #restaurant-img {
 	width: 90%;
   max-width: 800px;
