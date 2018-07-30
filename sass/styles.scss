@@ -321,3 +321,13 @@ nav h1 a, nav h2 a {
   width: 50%;
   display: inline-block;
 }
+
+/* ====================== Review Form ====================== */
+form#restaurantReviewForm label {
+  padding: 10px;
+}
+form#restaurantReviewForm input[type="submit"],input[type="text"], textarea  {
+  padding: 10px;
+  margin: 5px;
+  font-size: 12pt;
+}

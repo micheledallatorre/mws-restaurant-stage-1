@@ -11,10 +11,20 @@ var markers = [];
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   // start service Worker
-  //DBHelper.startServiceWorker();
-  initMap(); // added
-  fetchNeighborhoods();
-  fetchCuisines();
+  DBHelper.startServiceWorker();
+
+  IDBHelper.checkIfDatabaseExists(dbname=IDBHelper.DB_NAME, (res) => {
+    console.log(IDBHelper.DB_NAME + ' exists? ' + res);
+    if (!res) {
+      IDBHelper.createDatabase();
+      IDBHelper.fillDatabase(IDBHelper.dbPromise);
+    }
+  });
+  setTimeout(function() {
+    this.fetchNeighborhoods();
+    this.fetchCuisines();
+    initMap(); // added
+  }, 3000);
 });
 
 /**
@@ -26,7 +36,7 @@ fetchNeighborhoods = () => {
       console.error(error);
     } else {
       self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
+      this.fillNeighborhoodsHTML();
     }
   });
 };
@@ -53,7 +63,7 @@ fetchCuisines = () => {
       console.error(error);
     } else {
       self.cuisines = cuisines;
-      fillCuisinesHTML();
+      this.fillCuisinesHTML();
     }
   });
 };

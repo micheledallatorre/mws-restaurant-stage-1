@@ -108,6 +108,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   // fill reviews
   fillReviewsHTML();
 
+  // display review form
+  createReviewFormHTML();
+
   // fill favorite HTML element
   fillRestaurantFavoriteHTML();
 };
@@ -186,10 +189,12 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = (review) => {
+  console.log('Review', review);
   const li = document.createElement('li');
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  var createdDate = new Date(review.createdAt * 1000);
+  date.innerHTML = createdDate;
   date.className = 'review-date';
   date.tabIndex= '0';
   li.appendChild(date);
@@ -214,6 +219,91 @@ createReviewHTML = (review) => {
 
   return li;
 };
+
+/**
+ * Create HTML review form
+ */
+createReviewFormHTML = (id = self.restaurant.id) => {
+  const formElement = document.getElementById('review-form');
+
+  const myForm = document.createElement('form');
+  myForm.setAttribute('id', 'restaurantReviewForm');
+  myForm.setAttribute('onsubmit', 'DBHelper.saveReviewOffline(event, this);');
+
+  const title = document.createElement('h2');
+  title.innerHTML = 'Restaurant Review Form ';
+  myForm.appendChild(title);
+
+  const restaurantId = document.createElement('input');
+  restaurantId.setAttribute('type', 'hidden');
+  restaurantId.setAttribute('name', 'id');
+  restaurantId.setAttribute('value', `${id}`);
+  myForm.appendChild(restaurantId);
+
+  const reviewUpdatedDate = document.createElement('input');
+  unixTime = Math.round(Date.now());
+  reviewUpdatedDate.setAttribute('type', 'hidden');
+  reviewUpdatedDate.setAttribute('name', 'updatedDate');
+  reviewUpdatedDate.setAttribute('value', `${unixTime}`);
+  myForm.appendChild(reviewUpdatedDate);
+
+  const reviewSyncFlag = document.createElement('input');
+  reviewSyncFlag.setAttribute('type', 'hidden');
+  reviewSyncFlag.setAttribute('name', 'syncFlag');
+  reviewSyncFlag.setAttribute('value', 'unsynced');
+  myForm.appendChild(reviewSyncFlag);
+
+  const reviewerLabel = document.createElement('label');
+  reviewerLabel.innerHTML = 'Your Name: ';
+  myForm.appendChild(reviewerLabel);
+
+  const reviewerInputElem = document.createElement('input');
+  reviewerInputElem.setAttribute('type', 'text');
+  reviewerInputElem.setAttribute('name', 'reviewerName');
+  reviewerInputElem.setAttribute('placeholder', 'Please enter your name here!');
+  reviewerInputElem.setAttribute('aria-label', 'Name of the reviewer');
+  myForm.appendChild(reviewerInputElem);
+
+  const line = document.createElement('br');
+  myForm.appendChild(line);
+
+  const ratingLabel = document.createElement('label');
+  ratingLabel.innerHTML = 'Your Rating: ';
+  myForm.appendChild(ratingLabel);
+
+  const ratingInputElem = document.createElement('input');
+  ratingInputElem.setAttribute('type', 'text');
+  ratingInputElem.setAttribute('name', 'reviewerRating');
+  ratingInputElem.setAttribute('placeholder', '1 < your rating < 5');
+  ratingInputElem.setAttribute('aria-label', 'restaurant rating');
+  myForm.appendChild(ratingInputElem);
+
+  const line2 = document.createElement('br');
+  myForm.appendChild(line2);
+
+  const reviewLabel = document.createElement('label');
+  reviewLabel.innerHTML = 'Your Review: ';
+  myForm.appendChild(reviewLabel);
+
+  const rewiewTextareaElem = document.createElement('textarea');
+  rewiewTextareaElem.setAttribute('name', 'reviewText');
+  rewiewTextareaElem.setAttribute('placeholder', 'Write here your comments!');
+  rewiewTextareaElem.setAttribute('aria-label', 'restaurant review');
+  myForm.appendChild(rewiewTextareaElem);
+
+  const line3 = document.createElement('br');
+  myForm.appendChild(line3);
+
+  const submitButton = document.createElement('input');
+  submitButton.setAttribute('type', 'submit');
+  submitButton.setAttribute('name', 'dsubmit');
+  submitButton.setAttribute('value', 'Submit');
+  myForm.appendChild(submitButton);
+
+  formElement.appendChild(myForm);
+};
+
+
 
 /**
  * Add restaurant name to the breadcrumb navigation menu

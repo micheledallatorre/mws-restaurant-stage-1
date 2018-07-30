@@ -117,3 +117,14 @@ self.addEventListener('message', function(event) {
     self.skipWaiting();
   }
 });
+
+/*
+ * Sync reviews for offline mode
+ */
+self.addEventListener('sync', event => {
+  if (event.tag === 'syncReviews') {
+    /*eslint-disable no-undef*/
+    event.waitUntil(IDBHelper.getAndSaveReviews());
+    /*eslint-enable no-undef*/
+  }
+});

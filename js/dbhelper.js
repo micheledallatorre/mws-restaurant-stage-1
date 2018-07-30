@@ -1,8 +1,12 @@
 /*eslint-disable no-undef*/
 /*eslint-disable no-unused-vars*/
-
+/*
 const myDatabase = 'restaurantsDatabase';
 const myDatabaseObject = 'restaurantsObject';
+*/
+
+/*eslint-env es6*/
+
 /**
  * Common database helper functions.
  */
@@ -11,13 +15,21 @@ class DBHelper {
    * Register and start the Service Worker
    */
   static startServiceWorker() {
-    if (!navigator.serviceWorker) return;
-    navigator.serviceWorker.register('sw.js')
-      .then(function(r){
-        console.log('Service Worker registered with scope ' + r.scope);
-      }).catch(function(e){
-        console.log('Registration failed with error ' + e);
-      });
+    if (!navigator.serviceWorker) 
+      return;
+    navigator.serviceWorker.register('sw.js', {scope: '/'})
+      .then(reg => {
+        console.log('Service Worker registered with scope ' + reg.scope);
+        // get the HTML element for the restaurant review form
+        const restaurantReviewForm = document.getElementById('restaurantReviewForm');
+        if (restaurantReviewForm) {
+          restaurantReviewForm.addEventListener('submit', () => {
+            reg.sync.register('syncReviews')
+              .then(() => console.log('Registered service worker task: syncReviews'));
+          });
+        }
+      })
+      .catch(error => console.log('Registration failed with error ' + error));          
   }
   
   static myDebugger(data) {
@@ -31,24 +43,34 @@ class DBHelper {
   /**
    * Database URL
    */
+  /*
   static get DATABASE_URL() {
     // server port and URL of the Local Development API Server
     const serverPort = 1337; // Change this to your server port
     const server = 'localhost';
     return `http://${server}:${serverPort}/restaurants`;
   }
+  */
 
   /**
    * Fetch all restaurants.
-   *
+   */
   static fetchRestaurants(callback) {
+    /*
     fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
       .then(restaurants => callback(null, restaurants))
       .catch(e => callback(e, null));
+      */
+    /*eslint-disable no-undef*/
+    IDBHelper.getData(IDBHelper.dbPromise)
+    /*eslint-enable no-undef*/
+      .then(restaurants => {
+        return callback(null, restaurants);
+      });
   }
-  */
 
+  /*
   static openDatabase() {
     if(!navigator.serviceWorker) {
       return Promise.resolve();
@@ -60,10 +82,12 @@ class DBHelper {
       store.createIndex('by-id', 'id');
     });
   }
+*/
 
   /** 
   * Save data (i.e. restaurants) to the database 
   */ 
+  /*
   static save(data) {
     return DBHelper.openDatabase().then(function(database){
       if (!database)
@@ -78,14 +102,18 @@ class DBHelper {
     });
   }
 
+*/
+
   /**
   *  Update favorite value in the database
   */
+  /*
   static updateFavorite(id, flag){
     return DBHelper.openDatabase().then(function(database){
       /*if (!database)
         return;
-*/
+  */
+  /*
       const tx = database.transaction(myDatabaseObject, 'readwrite');
       const store = tx.objectStore(myDatabaseObject);
       var myRestaurant = store.get(id) || 0;
@@ -101,10 +129,12 @@ class DBHelper {
       //};
     }); 
   }
+  */
 
   /*
   * Fetch and save data to database
   */
+  /*
   static fetchRestaurantsFromDatabase(){
     return fetch(DBHelper.DATABASE_URL)
       .then(function(response){
@@ -114,10 +144,12 @@ class DBHelper {
         return restaurants;
       });
   }
+  */
 
   /*
   * Get data from database
   */
+  /*
   static getRestaurantsFromCache() {
     return DBHelper.openDatabase().then(function(database){
       if(!database)
@@ -126,10 +158,12 @@ class DBHelper {
       return store.getAll();
     });
   }
+  */
 
   /**
    * Fetch all restaurants
    */
+  /*
   static fetchRestaurants(callback) {
     return DBHelper.getRestaurantsFromCache().then(restaurants => {
       if(restaurants.length) {
@@ -143,6 +177,7 @@ class DBHelper {
       callback(error, null);
     });
   }
+  */
 
   /**
    * Fetch a restaurant by its ID.
@@ -298,6 +333,7 @@ class DBHelper {
    * Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {
+    /*eslint-disable no-undef*/
     // https://leafletjs.com/reference-1.3.0.html#marker  
     const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
       {title: restaurant.name,
@@ -306,6 +342,7 @@ class DBHelper {
       });
     marker.addTo(newMap);
     return marker;
+    /*eslint-enable no-undef*/
   }
 
   /**
@@ -313,12 +350,38 @@ class DBHelper {
   */
   static toggleFavorite(id, flag) {
     //fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=${flag}`, { method: 'POST' })
-    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${flag}`, { method: 'POST' })
-      .then(DBHelper.updateFavorite(id, flag))
-      .then(response => console.log(`Set favorite to ${flag} for restaurant ${id}`))
+    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${flag}`, { method: 'PUT' })
+      .then(res => console.log(`updated API restaurant: ${id} favorite : ${flag}`))
+      /*eslint-disable no-undef*/
+      .then(IDBHelper.toggleRestaurantFavorite(id, flag))
+      .then (function() { //PUTs is_favorite=true into API
+        location.href=location.href; //Reloads page which should update the changed value of is_favorite in IDB
+      })
+      /*eslint-enable no-undef*/
+      .then(response => console.log(`Set favorite to ${flag} for restaurant ${id} in IDB database`));
       // reload page to update favorite button
-      .then(location.reload());
-    }
+      //.then(location.reload());
+  }
+
+  /**
+   * Get the review from the form and save it offline
+   */
+  static saveReviewOffline(event, form) {
+    event.preventDefault();
+    const newReview = {
+      'restaurant_id': parseInt(form.id.value),
+      'name': form.reviewerName.value,
+      'rating': parseInt(form.reviewerRating.value),
+      'comments': form.reviewText.value,
+      'updatedAt': parseInt(form.updatedDate.value),
+      'flag': form.syncFlag.value,
+    };
+    /*eslint-disable no-undef*/
+    // save review into database 
+    IDBHelper.addReview(form.id.value, newReview);
+    /*eslint-enable no-undef*/
+    location.reload();
+  }
 
   /* static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({
