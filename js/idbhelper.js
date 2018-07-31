@@ -20,7 +20,7 @@ class IDBHelper {
   static get dbPromise() {
     if (!('indexedDB' in window)) {
       console.log('This browser does not support IndexedDB');
-      return;
+      return 0;
     }
     /*eslint-disable no-undef*/
     // open database

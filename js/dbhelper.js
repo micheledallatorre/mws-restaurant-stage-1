@@ -355,12 +355,14 @@ class DBHelper {
       /*eslint-disable no-undef*/
       .then(IDBHelper.toggleRestaurantFavorite(id, flag))
       .then (function() { //PUTs is_favorite=true into API
+        /*eslint-disable no-self-assign*/
         location.href=location.href; //Reloads page which should update the changed value of is_favorite in IDB
+        /*eslint-enable no-self-assign*/
       })
       /*eslint-enable no-undef*/
       .then(response => console.log(`Set favorite to ${flag} for restaurant ${id} in IDB database`));
-      // reload page to update favorite button
-      //.then(location.reload());
+    // reload page to update favorite button
+    //.then(location.reload());
   }
 
   /**
