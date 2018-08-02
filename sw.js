@@ -9,6 +9,7 @@ self.addEventListener('install', function(event) {
       console.log('Service Worker caching application files...');
       // cache all resources
       return cache.addAll([
+        '/',
         '/index.html',
         '/restaurant.html',
         '/sw.js',
