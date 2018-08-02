@@ -121,7 +121,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantFavoriteHTML = (id = self.restaurant.id, is_favorite = self.restaurant.is_favorite) => {
   const favoriteElem = document.getElementById('restaurant-favorite');
-  console.log(self.restaurant);
+//  console.log(self.restaurant);
 
   let favButton = document.createElement('button');
   favButton.setAttribute('id', 'favorite-button');
@@ -189,7 +189,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = (review) => {
-  console.log('Review', review);
+//  console.log('Review', review);
   const li = document.createElement('li');
 
   const date = document.createElement('p');

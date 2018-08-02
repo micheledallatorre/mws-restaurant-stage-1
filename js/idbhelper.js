@@ -121,15 +121,20 @@ class IDBHelper {
    */
   static toggleRestaurantFavorite(id, value) {
     let myID = parseInt(id);
+    let is_favorite = String(value);
+
     IDBHelper.dbPromise.then(db => {
       //console.log(`Dbpromise: ${dbPromise}`);
       const tx = db.transaction(DB_OBJECT, 'readwrite');
-      const store = tx.objectStore(DB_OBJECT);
-      let val = store.get(myID) || 0;
-      val.is_favorite = String(value);
-      console.log(`in toggleRestaurantFavorite, val: ${val.is_favorite} id: ${id}, myID: ${myID}`);
-      store.put(val, myID);
-      return tx.complete;
+      const objStore = tx.objectStore(DB_OBJECT);
+      let val = objStore.get(myID).then(function(response) {
+        response.is_favorite = String(value);
+        console.log(`in toggleRestaurantFavorite, response_isFav: ${response.is_favorite} id: ${id}, reponse: ${response}`);
+        objStore.put(response, myID);
+        return tx.complete;
+      }, function(error) {
+        console.error("Failed addReview!", error);
+      });
     });
   }
 
@@ -140,11 +145,15 @@ class IDBHelper {
     let key = parseInt(id);
     IDBHelper.dbPromise.then(db => {
       const tx = db.transaction(DB_OBJECT, 'readwrite');
-      const store = tx.objectStore(DB_OBJECT);
-      let val = store.get(key);
-      val.reviews.push(body);
-      store.put(val, key);
-      return tx.complete;
+      const objStore = tx.objectStore(DB_OBJECT);
+      let val = objStore.get(key).then(function(response) {
+        console.log(`in addReview, response: ${response}, reviews ${response.reviews}, id: ${id}, reviewBody: ${body}`);
+        response.reviews.push(body);
+        objStore.put(response, key);
+        return tx.complete;
+      }, function(error) {
+        console.error("Failed addReview!", error);
+      });
     });
   }
 
