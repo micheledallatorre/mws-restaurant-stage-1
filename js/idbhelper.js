@@ -161,6 +161,7 @@ class IDBHelper {
    * Update restaurant database by getting and saving reviews into the restaurant database
    */
   static getAndSaveReviews() {
+    console.log('In getAndSaveReviews');
     // get all data from the database
     IDBHelper.getData(IDBHelper.dbPromise)
       .then(data => {

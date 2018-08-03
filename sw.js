@@ -1,3 +1,6 @@
+/*eslint-disable no-undef*/
+importScripts('/js/idbhelper.js'); 
+/*eslint-enable no-undef*/
 // define a cache variable for this project
 var mwsRestaurantCache = 'mws-restaurant-stage-1';
 
@@ -14,12 +17,15 @@ self.addEventListener('install', function(event) {
         '/restaurant.html',
         '/sw.js',
         '/js/dbhelper.js',
-        '/js/main.js',
         '/js/idb.js',
+        '/js/idbhelper.js',
+        '/js/main.js',
         '/js/restaurant_info.js',
+        '/css/leaflet.css',
         '/css/styles.css',
         '/css/responsive.css',
         '/img/no_image_available.svg',
+        // restaurant images
         '/img/1.jpg',
         '/img/2.jpg',
         '/img/3.jpg',
@@ -30,6 +36,7 @@ self.addEventListener('install', function(event) {
         '/img/8.jpg',
         '/img/9.jpg',
         '/img/10.jpg',
+        // map icons
         '/img/icons/layers.png',
         '/img/icons/layers-2x.png',
         '/img/icons/marker-icon.png',

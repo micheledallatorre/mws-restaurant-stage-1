@@ -20,8 +20,9 @@ class DBHelper {
     navigator.serviceWorker.register('sw.js', {scope: '/'})
       .then(reg => {
         console.log('Service Worker registered with scope ' + reg.scope);
-        // get the HTML element for the restaurant review form
-        const restaurantReviewForm = document.getElementById('restaurantReviewForm');
+        // get the HTML element for the restaurant review form: use the form container ID, that is already in the restaurant.html DOM at creation time
+        const restaurantReviewForm = document.getElementById('review-form');
+        console.log(`restaurantReviewForm ${restaurantReviewForm}`);
         if (restaurantReviewForm) {
           restaurantReviewForm.addEventListener('submit', () => {
             reg.sync.register('syncReviews')
