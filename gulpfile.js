@@ -12,6 +12,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
 /*eslint-enable no-unused-vars*/
+var webserver = require('gulp-webserver');
 
 
 
@@ -136,3 +137,14 @@ gulp.task('dist', gulp.series([
   'scripts-dist',
   'copy-manifest'
 ]));
+
+/* Task to run a webserver on port 8080 */
+gulp.task('webserver', function() {
+  gulp.src('dist')
+    .pipe(webserver({
+      host: 'localhost',
+      port: 8000,
+      livereload: true,
+      open: true,
+    }));
+});
