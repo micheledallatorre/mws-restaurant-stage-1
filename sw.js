@@ -1,5 +1,8 @@
 /*eslint-disable no-undef*/
 importScripts('/js/idbhelper.js'); 
+importScripts('/js/idb.js'); 
+var window = {};
+self.idbhelper = window.idbhelper;
 /*eslint-enable no-undef*/
 // define a cache variable for this project
 var mwsRestaurantCache = 'mws-restaurant-stage-1';
@@ -130,6 +133,7 @@ self.addEventListener('message', function(event) {
  * Sync reviews for offline mode
  */
 self.addEventListener('sync', event => {
+  console.log('In SYNC EVENT, window' + window);
   if (event.tag === 'syncReviews') {
     /*eslint-disable no-undef*/
     event.waitUntil(IDBHelper.getAndSaveReviews());

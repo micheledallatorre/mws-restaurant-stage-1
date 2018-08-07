@@ -18,10 +18,12 @@ class IDBHelper {
   * Get database promise
   */
   static get dbPromise() {
+    /* if called from sw.js, windows is not defined
     if (!('indexedDB' in window)) {
       console.log('This browser does not support IndexedDB');
       return 0;
     }
+    */
     /*eslint-disable no-undef*/
     // open database
     const dbPromise = idb.open(DB_NAME, DB_VERSION);
